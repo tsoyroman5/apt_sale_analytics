@@ -69,6 +69,7 @@ numbered as (
     select
         *,
         count(*) over (partition by deal_group_key)                     as deal_group_size,
+        countif(not is_cancelled) over (partition by deal_group_key)    as active_deal_group_size,
         row_number() over (
             partition by deal_group_key
             order by registration_date, lot_number, buyer_type, seller_type,

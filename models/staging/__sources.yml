@@ -2,12 +2,12 @@ version: 2
 
 sources:
   - name: raw
-    # database: apt-sales-data 
+    database: apt-sale-data
     schema: raw
     description: Raw landing zone loaded by the EL script (data.go.kr apartment sales, all columns STRING).
     tables:
       - name: apt_transactions_raw
-        description: This table contains the raw data for apartment transactions, including details such as transaction ID, date, price, and property information. It serves as the foundational dataset for analyzing apartment sales trends and patterns over the specified years.One row per reported apartment sale, as returned by the API.
+        description: One row per reported apartment sale, as returned by the API.
         columns:
           - name: aptDong
             description: The neighborhood or district where the apartment is located. This column helps in identifying the geographical area of the property.
