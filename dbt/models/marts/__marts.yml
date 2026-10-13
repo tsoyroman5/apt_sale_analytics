@@ -1,0 +1,86 @@
+version: 2
+
+models:
+  - name: dim_apartment
+    description: "One row per apartment complex, keyed on the government complex identifier."
+    columns:
+      - name: apartment_seq
+        description: "Government identifier of the complex (primary key)."
+        data_tests: [not_null, unique]
+      - name: apartment_name
+        description: "Complex name."
+      - name: build_year
+        description: "Year the complex was built."
+      - name: district_code
+        description: "5-digit legal district code."
+      - name: neighborhood_code
+        description: "Legal neighborhood (dong) code."
+      - name: neighborhood_name
+        description: "Legal neighborhood (dong) name."
+
+  - name: dim_date
+    description: "One row per calendar day between the first and last deal date."
+    columns:
+      - name: date_day
+        description: "Calendar date (primary key)."
+        data_tests: [not_null, unique]
+      - name: year
+        description: "Calendar year."
+      - name: quarter
+        description: "Calendar quarter (1 to 4)."
+      - name: month
+        description: "Calendar month (1 to 12)."
+      - name: year_month
+        description: "Year and month as YYYY-MM."
+      - name: weekday_name
+        description: "Name of the weekday."
+
+  - name: fact_apt_sales
+    description: "One row per reported sale record. The grain is a record, not a unit, because the source has no unit number. Filter on is_cancelled and is_bulk_deal for price analysis."
+    columns:
+      - name: transaction_id
+        description: "Row identifier. Unique by construction, not evidence that records are distinct sales."
+        data_tests: [not_null, unique]
+      - name: apartment_seq
+        description: "Foreign key to dim_apartment."
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_apartment')
+                field: apartment_seq
+      - name: deal_date
+        description: "Foreign key to dim_date. Contract date."
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_day
+      - name: apartment_dong
+        description: "Building (dong) as published. Free text and often blank."
+      - name: floor_no
+        description: "Floor of the unit."
+      - name: exclusive_area_m2
+        description: "Exclusive use area in square meters."
+      - name: deal_amount_10k_krw
+        description: "Price in units of 10,000 KRW, as published."
+      - name: deal_amount_krw
+        description: "Price in KRW (deal_amount_10k_krw x 10,000)."
+      - name: price_per_m2_krw
+        description: "Price in KRW per square meter of exclusive area."
+      - name: deal_type
+        description: "Brokered (중개거래) or direct (직거래) deal."
+      - name: buyer_type
+        description: "Buyer category, or 'not_reported' for deals dated 2023."
+      - name: seller_type
+        description: "Seller category, or 'not_reported' for deals dated 2023."
+      - name: is_cancelled
+        description: "True when the deal was reported as cancelled."
+      - name: cancellation_date
+        description: "Date of cancellation, null if not cancelled."
+      - name: registration_date
+        description: "Date of registration, null until registered and for cancelled deals."
+      - name: active_deal_group_size
+        description: "Number of non-cancelled records sharing this record's business key."
+      - name: is_bulk_deal
+        description: "True for a non-cancelled record whose business key is shared by at least bulk_deal_min_group_size (8) non-cancelled records. Likely a bulk transfer; exclude from price statistics."
+        data_tests: [not_null]

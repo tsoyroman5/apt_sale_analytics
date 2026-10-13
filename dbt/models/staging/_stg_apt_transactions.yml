@@ -1,0 +1,71 @@
+version: 2
+
+models:
+  - name: stg_apt_transactions
+    description: "One row per apartment sale record as reported by the API, renamed to snake_case, trimmed, typed and keyed. Cancelled deals are kept and flagged. The source has no unit number, so rows can share a business key (see deal_group_key)."
+    columns:
+      - name: transaction_id
+        description: "Row identifier: deal_group_key plus an occurrence counter. Unique by construction, not evidence that records are distinct sales."
+        data_tests: [not_null, unique]
+      - name: deal_group_key
+        description: "Hash of immutable fields (complex, dong, floor, area, deal date, price). Several records can share it."
+        data_tests: [not_null]
+      - name: deal_group_size
+        description: "Number of records, cancelled or not, sharing the same deal_group_key."
+      - name: active_deal_group_size
+        description: "Number of non-cancelled records sharing the same deal_group_key."
+      - name: deal_seq_in_group
+        description: "Occurrence number of this record within its deal_group_key."
+      - name: request_district_code
+        description: "District code sent in the API request (tagged on by the EL script)."
+      - name: request_month
+        description: "Deal month (YYYYMM) sent in the API request."
+      - name: district_code
+        description: "5-digit legal district (si/gun/gu) code of the apartment."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["11500", "11620", "11680", "11710", "11740"]
+      - name: neighborhood_code
+        description: "Legal neighborhood (dong) code."
+      - name: neighborhood_name
+        description: "Legal neighborhood (dong) name."
+      - name: lot_number
+        description: "Land lot number (jibun) as published."
+      - name: road_name
+        description: "Road-name address of the complex."
+      - name: apartment_seq
+        description: "Government identifier of the apartment complex. Use this to join, not the name or the address: different complexes can share a lot."
+        data_tests: [not_null]
+      - name: apartment_name
+        description: "Complex name as published."
+      - name: apartment_dong
+        description: "Building (dong) number or free-text label. Inconsistent in format and blank for many records, so not reliable as a key."
+      - name: build_year
+        description: "Year the complex was built."
+      - name: exclusive_area_m2
+        description: "Exclusive use area of the unit in square meters."
+      - name: floor_no
+        description: "Floor of the unit. Can be negative for basements."
+      - name: deal_amount_10k_krw
+        description: "Sale price in units of 10,000 KRW (man-won), as published."
+        data_tests: [not_null]
+      - name: deal_date
+        description: "Contract date, built from the published year, month and day."
+        data_tests: [not_null]
+      - name: deal_type
+        description: "Brokered (중개거래) or direct (직거래) deal."
+      - name: buyer_type
+        description: "Buyer category as published (individual, corporation, public institution, other). Null for every deal dated 2023, because the API does not publish it before 2024-01."
+      - name: seller_type
+        description: "Seller category as published. Null for every deal dated 2023."
+      - name: agent_location
+        description: "Location of the brokering agent(s) as published. May contain several districts in one string."
+      - name: land_leasehold_flag
+        description: "Land leasehold indicator as published (Y/N)."
+      - name: is_cancelled
+        description: "True when the API flags the deal as cancelled (cdealType = 'O')."
+      - name: cancellation_date
+        description: "Date the cancellation occurred, parsed from the yy.mm.dd format. Null if not cancelled."
+      - name: registration_date
+        description: "Date the sale was registered, parsed from the yy.mm.dd format. Null until registration and for cancelled deals."
