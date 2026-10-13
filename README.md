@@ -1,5 +1,7 @@
 # Seoul Apartment Sales: an ELT pipeline with BigQuery and dbt
 
+**[Live dbt docs](https://<your-username>.github.io/<repo-name>/)**: model lineage, column descriptions and test coverage.
+
 An end-to-end analytics engineering project on public Korean real-estate data. A Python extractor loads apartment sale records from the government open-data API into BigQuery, and dbt turns them into a tested star schema.
 
 **Stack:** Python · BigQuery · dbt · Git
