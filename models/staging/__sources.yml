@@ -1,9 +1,80 @@
 version: 2
 
 sources:
-  - name: apt_sales_raw
+  - name: raw
+    # database: apt-sales-data 
     schema: raw
-    description: Appartment transactions sales data for 2023, 2024, 2025 and 2026
+    description: Raw landing zone loaded by the EL script (data.go.kr apartment sales, all columns STRING).
     tables:
       - name: apt_transactions_raw
-        description: This table contains the raw data for apartment transactions, including details such as transaction ID, date, price, and property information. It serves as the foundational dataset for analyzing apartment sales trends and patterns over the specified years.
+        description: This table contains the raw data for apartment transactions, including details such as transaction ID, date, price, and property information. It serves as the foundational dataset for analyzing apartment sales trends and patterns over the specified years.One row per reported apartment sale, as returned by the API.
+        columns:
+          - name: aptDong
+            description: The neighborhood or district where the apartment is located. This column helps in identifying the geographical area of the property.
+          - name: aptNm
+            description: The name of the apartment complex or building. This column provides information about the specific property involved in the transaction.
+          - name: aptSeq
+            description: The sequence number of the apartment within the complex. This column helps in identifying the specific unit within the building.
+          - name: bonbun
+            description: The main building number of the apartment. This column is used to identify the primary address of the property.  
+          - name: bubun
+            description: The sub-building number of the apartment. This column is used to identify the specific section or unit of the property.
+          - name: buildYear
+            description: The year in which the apartment building was constructed. This column provides information about the age of the property.
+          - name: buyerGbn
+            description: The category or type of buyer involved in the transaction. This column helps in understanding the demographics of the buyers.
+          - name: cdealDay
+            description: The date on which the apartment transaction was completed. This column is essential for tracking the timing of sales and analyzing market trends.
+          - name: cdealType
+            description: The type of transaction that took place, such as a sale, lease, or transfer. This column provides context for the nature of the transaction.
+          - name: dealAmount
+            description: The total monetary value of the apartment transaction. This column is crucial for financial analysis and understanding market pricing.
+          - name: dealDay
+            description: The specific day of the month when the transaction occurred. This column helps in analyzing sales patterns on a daily basis.
+          - name: dealMonth
+            description: The month in which the apartment transaction took place. This column is useful for identifying
+          - name: dealYear
+            description: The year in which the apartment transaction occurred. This column is important for analyzing long-term trends and patterns in the real estate market.
+          - name: dealingGbn
+            description: The category or type of dealing party involved in the transaction. This column helps in understanding the demographics of the dealing parties. 
+          - name: estateAgentSggNm
+            description: The name of the administrative district where the real estate agent is located. This column provides information about the geographical area of the agent involved in the transaction.
+          - name: excluUseAr
+            description: The exclusive use area of the apartment, typically measured in square meters. This column is important for understanding the size and layout of the property.
+          - name: floor
+            description: The floor number on which the apartment unit is located. This column helps in identifying the vertical position of the property within the building.
+          - name: jibun
+            description: The lot number or land registration number associated with the apartment property. This column is used for legal and administrative purposes.
+          - name: landCd
+            description: The land classification code associated with the apartment property. This column is used for legal and administrative purposes.
+          - name: landLeaseholdGbn
+            description: The category or type of land leasehold associated with the apartment property. This column helps in understanding the legal status of the land on which the property is situated.
+          - name: rgstDate
+            description: The date on which the apartment transaction was registered. This column is important for legal and administrative purposes, as it indicates when the transaction became official.
+          - name: roadNm
+            description: The name of the road or street where the apartment is located. This column provides information about the geographical location of the property. 
+          - name: roadNmBonbun
+            description: The main building number on the road where the apartment is located. This column helps in identifying the primary address of the property.
+          - name: roadNmBubun
+            description: The sub-building number on the road where the apartment is located. This column helps
+          - name: roadNmSeq
+            description: The sequence number of the building on the road where the apartment is located. This column helps in identifying the specific unit within the building.
+          - name: roadNmSeq
+            description: The sequence number of the building on the road where the apartment is located. This column helps in identifying the specific unit within the building.  
+          - name: roadNmSggCd
+            description: The administrative district code associated with the road where the apartment is located. This column provides information about the geographical area of the property.
+          - name: roadNmbCd
+            description: The administrative district code associated with the road where the apartment is located. This column provides information about the geographical area of the property.
+          - name: sggCd
+            description: The administrative district code associated with the apartment property. This column provides information about the geographical area of the property.
+          - name: slerGbn
+            description: The category or type of seller involved in the transaction. This column helps in understanding the demographics of the sellers.
+          - name: umdCd
+            description: The administrative district code associated with the apartment property. This column provides information about the geographical area of the property.
+          - name: umdNm
+            description: The name of the administrative district associated with the apartment property. This column provides information about the geographical area of the property.  
+          - name: lawd_cd
+            description: The administrative district code associated with the apartment property. This column provides information about the geographical area of the property.
+          - name: deal_ymd
+            description: The full date (year, month, day) on which the apartment transaction occurred. This column is important for analyzing sales patterns and trends over time.
+          
