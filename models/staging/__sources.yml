@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: apt_sales_raw
+    schema: raw
+    description: Appartment transactions sales data for 2023, 2024, 2025 and 2026
+    tables:
+      - name: apt_transactions_raw
+        description: This table contains the raw data for apartment transactions, including details such as transaction ID, date, price, and property information. It serves as the foundational dataset for analyzing apartment sales trends and patterns over the specified years.
